@@ -1,7 +1,1 @@
-{
-  "/page": "app/page.js",
-  "/journal/page": "app/journal/page.js",
-  "/chatbot/page": "app/chatbot/page.js",
-  "/dashboard/page": "app/dashboard/page.js",
-  "/resources/page": "app/resources/page.js"
-}
+{}
