@@ -19,10 +19,32 @@ export default function LoginPage() {
     rememberMe: false,
   })
 
-  const handleSubmit = (e: React.FormEvent) => {
+   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle login logic here
-    console.log("Login attempt:", formData)
+    console.log("Login Attempt:", formData)
+
+    try {
+      const response = await fetch("http://localhost:5000/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({
+          email: formData.email,
+          password: formData.password,
+        }),
+      })
+
+      const data = await response.json()
+      if (response.ok) {
+        alert(data.message || "Login successful ✅")
+        window.location.href = "/dashboard"
+      } else {
+        alert(data.message || "Login failed ❌")
+      }
+    } catch (err) {
+      console.error("Login error:", err)
+      alert("Something went wrong ❌")
+    }
   }
 
   return (

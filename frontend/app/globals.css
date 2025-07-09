@@ -126,3 +126,21 @@
 .focus-ring {
   @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
 }
+
+/* GLOBAL RESET FOR PURE WHITE LOGIN/SIGNUP PAGES */
+
+html, body {
+  background-color: white !important;
+  color: black !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  background-color: white !important;
+  color: inherit;
+  box-shadow: none !important;
+  filter: none !important;
+  outline: black;
+  border-color: #0b0b0b;
+}
