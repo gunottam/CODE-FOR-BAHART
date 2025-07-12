@@ -36,6 +36,10 @@ export default function LoginPage() {
 
       const data = await response.json()
       if (response.ok) {
+        // Store user info in localStorage
+        if (data.user) {
+          localStorage.setItem("user", JSON.stringify(data.user));
+        }
         alert(data.message || "Login successful ✅")
         window.location.href = "/dashboard"
       } else {

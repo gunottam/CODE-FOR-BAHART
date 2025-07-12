@@ -4,6 +4,7 @@ import dotenv from 'dotenv';
 import cors from 'cors';
 import path from 'path';
 import authRoutes from './routes/auth';
+import journalRoutes from './routes/journal';
 
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
@@ -22,6 +23,7 @@ app.get('/', (req, res) => {
 });
 
 app.use('/api/auth', authRoutes);
+app.use('/api/journal', journalRoutes);
 
 // ✅ MongoDB + Start server
 const PORT = process.env.PORT || 5000;

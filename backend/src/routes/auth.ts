@@ -20,7 +20,9 @@ router.post('/login', async (req, res) => {
       return res.status(401).json({ message: 'Incorrect password' })
     }
 
-    res.json({ message: 'Login successful' })
+    // Exclude password from returned user object
+    const { password: _pw, ...userWithoutPassword } = user.toObject();
+    res.json({ message: 'Login successful', user: userWithoutPassword })
   } catch (err) {
     console.error("Login error:", err)
     res.status(500).json({ message: 'Server error', error: err instanceof Error ? err.message : String(err) })

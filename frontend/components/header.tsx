@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Link from "next/link"
 import { Button } from "@/components/ui/button"
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet"
@@ -11,6 +11,21 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 export default function Header() {
   const [isOpen, setIsOpen] = useState(false)
   const { theme, setTheme } = useTheme()
+  const [user, setUser] = useState<any>(null)
+
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const stored = localStorage.getItem("user")
+      if (stored) setUser(JSON.parse(stored))
+      else setUser(null)
+    }
+  }, [])
+
+  const handleLogout = () => {
+    localStorage.removeItem("user")
+    setUser(null)
+    window.location.href = "/login"
+  }
 
   const navigation = [
     { name: "Home", href: "/" },
@@ -56,21 +71,37 @@ export default function Header() {
               <Moon className="absolute h-5 w-5 rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
             </Button>
 
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="icon" className="focus-ring" aria-label="User menu">
-                  <User className="h-5 w-5" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end">
-                <DropdownMenuItem asChild>
-                  <Link href="/login">Sign In</Link>
-                </DropdownMenuItem>
-                <DropdownMenuItem asChild>
-                  <Link href="/signup">Sign Up</Link>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            {user ? (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="focus-ring" aria-label="User menu">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href="/profile">Profile</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={handleLogout}>Logout</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            ) : (
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="focus-ring" aria-label="User menu">
+                    <User className="h-5 w-5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem asChild>
+                    <Link href="/login">Sign In</Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem asChild>
+                    <Link href="/signup">Sign Up</Link>
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
+            )}
           </div>
 
           {/* Mobile Menu */}
@@ -93,20 +124,40 @@ export default function Header() {
                   </Link>
                 ))}
                 <div className="border-t pt-4 space-y-2">
-                  <Link
-                    href="/login"
-                    className="block text-lg font-medium text-gray-600 hover:text-blue-600 transition-colors focus-ring rounded-lg px-2 py-2"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Sign In
-                  </Link>
-                  <Link
-                    href="/signup"
-                    className="block text-lg font-medium text-gray-600 hover:text-blue-600 transition-colors focus-ring rounded-lg px-2 py-2"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    Sign Up
-                  </Link>
+                  {user ? (
+                    <>
+                      <Link
+                        href="/profile"
+                        className="block text-lg font-medium text-gray-600 hover:text-blue-600 transition-colors focus-ring rounded-lg px-2 py-2"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Profile
+                      </Link>
+                      <button
+                        onClick={() => { handleLogout(); setIsOpen(false); }}
+                        className="block w-full text-left text-lg font-medium text-gray-600 hover:text-blue-600 transition-colors focus-ring rounded-lg px-2 py-2"
+                      >
+                        Logout
+                      </button>
+                    </>
+                  ) : (
+                    <>
+                      <Link
+                        href="/login"
+                        className="block text-lg font-medium text-gray-600 hover:text-blue-600 transition-colors focus-ring rounded-lg px-2 py-2"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Sign In
+                      </Link>
+                      <Link
+                        href="/signup"
+                        className="block text-lg font-medium text-gray-600 hover:text-blue-600 transition-colors focus-ring rounded-lg px-2 py-2"
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Sign Up
+                      </Link>
+                    </>
+                  )}
                 </div>
               </div>
             </SheetContent>
