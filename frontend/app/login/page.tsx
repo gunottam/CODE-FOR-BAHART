@@ -4,12 +4,15 @@ import type React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Heart, Eye, EyeOff } from "lucide-react"
+import { useAuth } from "@/contexts/AuthContext"
+import { useToast } from "@/hooks/use-toast"
 
 export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -18,11 +21,37 @@ export default function LoginPage() {
     password: "",
     rememberMe: false,
   })
+  const { login, isLoading } = useAuth()
+  const router = useRouter()
+  const { toast } = useToast()
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
-    // Handle login logic here
-    console.log("Login attempt:", formData)
+    
+    if (!formData.email || !formData.password) {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields",
+        variant: "destructive",
+      })
+      return
+    }
+
+    const success = await login(formData.email, formData.password)
+    
+    if (success) {
+      toast({
+        title: "Success",
+        description: "Welcome back!",
+      })
+      router.push("/dashboard")
+    } else {
+      toast({
+        title: "Error",
+        description: "Invalid email or password",
+        variant: "destructive",
+      })
+    }
   }
 
   return (
@@ -96,8 +125,8 @@ export default function LoginPage() {
                 </Link>
               </div>
 
-              <Button type="submit" className="w-full focus-ring">
-                Sign In
+              <Button type="submit" className="w-full focus-ring" disabled={isLoading}>
+                {isLoading ? "Signing In..." : "Sign In"}
               </Button>
             </form>
 

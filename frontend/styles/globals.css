@@ -10,6 +10,18 @@ body {
   .text-balance {
     text-wrap: balance;
   }
+  
+  .focus-ring {
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2;
+  }
+  
+  .gradient-calm {
+    @apply bg-gradient-to-br from-blue-50 via-white to-green-50;
+  }
+  
+  .card-subtle {
+    @apply bg-white/80 backdrop-blur-sm border border-blue-200/50 shadow-sm hover:shadow-md transition-all duration-200 dark:bg-gray-900/80 dark:border-gray-700/50;
+  }
 }
 
 @layer base {

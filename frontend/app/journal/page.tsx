@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react"
-import Header from "@/components/header"
+import { Header } from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
@@ -116,22 +116,22 @@ export default function JournalPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50">
+    <div className="min-h-screen gradient-calm">
       <Header />
 
       <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
         <div className="max-w-4xl mx-auto">
           {/* Header */}
           <div className="mb-8">
-            <h1 className="text-3xl font-bold text-gray-900 mb-2">Your Journal</h1>
-            <p className="text-gray-600">Express your thoughts and track your emotional journey</p>
+            <h1 className="text-3xl font-bold text-foreground mb-2">Your Journal</h1>
+            <p className="text-muted-foreground">Express your thoughts and track your emotional journey</p>
           </div>
 
           {/* New Entry Button */}
           {!isWriting && (
-            <Card className="mb-8 border-dashed border-2 border-blue-200 hover:border-blue-300 transition-colors">
+            <Card className="mb-8 border-dashed border-2 border-primary/30 hover:border-primary/50 transition-colors card-subtle">
               <CardContent className="p-8 text-center">
-                <Button onClick={() => setIsWriting(true)} size="lg" className="focus-ring">
+                <Button onClick={() => setIsWriting(true)} size="lg" className="focus-ring shadow-subtle">
                   <Plus className="mr-2 h-5 w-5" />
                   Write New Entry
                 </Button>
@@ -141,22 +141,22 @@ export default function JournalPage() {
 
           {/* New Entry Form */}
           {isWriting && (
-            <Card className="mb-8 border-blue-200">
+            <Card className="mb-8 border-primary/30 card-subtle">
               <CardHeader>
                 <CardTitle>New Journal Entry</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 {/* Date Picker */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Date</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">Date</label>
                   <Popover>
                     <PopoverTrigger asChild>
-                      <Button variant="outline" className="w-full justify-start text-left font-normal bg-transparent">
+                      <Button variant="outline" className="w-full justify-start text-left font-normal bg-transparent border-border hover:bg-muted/50">
                         <CalendarIcon className="mr-2 h-4 w-4" />
                         {selectedDate ? format(selectedDate, "PPP") : format(new Date(), "PPP")}
                       </Button>
                     </PopoverTrigger>
-                    <PopoverContent className="w-auto p-0">
+                    <PopoverContent className="w-auto p-0 glass">
                       <Calendar
                         mode="single"
                         selected={selectedDate || new Date()}
@@ -169,7 +169,7 @@ export default function JournalPage() {
 
                 {/* Title */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Title</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">Title</label>
                   <Input
                     placeholder="How are you feeling today?"
                     value={newEntry.title}
@@ -180,7 +180,7 @@ export default function JournalPage() {
 
                 {/* Mood Selector */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Mood</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">Mood</label>
                   <div className="flex space-x-2">
                     {moodEmojis.map((mood) => (
                       <button
@@ -188,8 +188,8 @@ export default function JournalPage() {
                         onClick={() => setNewEntry((prev) => ({ ...prev, mood: mood.value }))}
                         className={`p-3 rounded-lg border-2 transition-all focus-ring ${
                           newEntry.mood === mood.value
-                            ? "border-blue-500 bg-blue-50"
-                            : "border-gray-200 hover:border-gray-300"
+                            ? "border-primary bg-primary/10"
+                            : "border-border hover:border-border/70"
                         }`}
                         title={mood.label}
                       >
@@ -201,7 +201,7 @@ export default function JournalPage() {
 
                 {/* Content */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Your thoughts</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">Your thoughts</label>
                   <Textarea
                     placeholder="Write about your day, feelings, or anything on your mind..."
                     value={newEntry.content}
@@ -213,7 +213,7 @@ export default function JournalPage() {
 
                 {/* Tags */}
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Mood Tags</label>
+                  <label className="block text-sm font-medium text-foreground mb-2">Mood Tags</label>
                   <div className="flex flex-wrap gap-2">
                     {moodTags.map((tag) => (
                       <button
@@ -221,8 +221,8 @@ export default function JournalPage() {
                         onClick={() => toggleTag(tag)}
                         className={`px-3 py-1 rounded-full text-sm transition-all focus-ring ${
                           newEntry.tags.includes(tag)
-                            ? "bg-blue-500 text-white"
-                            : "bg-gray-100 text-gray-700 hover:bg-gray-200"
+                            ? "bg-primary text-primary-foreground"
+                            : "bg-muted text-muted-foreground hover:bg-muted/70"
                         }`}
                       >
                         {tag}
@@ -233,7 +233,7 @@ export default function JournalPage() {
 
                 {/* Actions */}
                 <div className="flex space-x-3">
-                  <Button onClick={handleSaveEntry} className="focus-ring">
+                  <Button onClick={handleSaveEntry} className="focus-ring shadow-subtle">
                     Save Entry
                   </Button>
                   <Button
@@ -242,7 +242,7 @@ export default function JournalPage() {
                       setIsWriting(false)
                       setNewEntry({ title: "", content: "", mood: 3, tags: [] })
                     }}
-                    className="focus-ring"
+                    className="focus-ring bg-transparent border-border hover:bg-muted/50"
                   >
                     Cancel
                   </Button>
@@ -254,7 +254,7 @@ export default function JournalPage() {
           {/* Search and Filter */}
           <div className="mb-6 flex flex-col sm:flex-row gap-4">
             <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground h-4 w-4" />
               <Input
                 placeholder="Search your entries..."
                 value={searchTerm}
@@ -267,7 +267,7 @@ export default function JournalPage() {
                 <Filter className="mr-2 h-4 w-4" />
                 <SelectValue placeholder="Filter by mood" />
               </SelectTrigger>
-              <SelectContent>
+              <SelectContent className="glass">
                 <SelectItem value="all">All moods</SelectItem>
                 {moodEmojis.map((mood) => (
                   <SelectItem key={mood.value} value={mood.value.toString()}>
@@ -281,8 +281,8 @@ export default function JournalPage() {
           {/* Entries List */}
           <div className="space-y-6">
             {filteredEntries.length === 0 ? (
-              <Card>
-                <CardContent className="p-8 text-center text-gray-500">
+              <Card className="card-subtle">
+                <CardContent className="p-8 text-center text-muted-foreground">
                   {searchTerm || filterMood
                     ? "No entries match your search criteria."
                     : "No journal entries yet. Start writing to track your journey!"}
@@ -292,21 +292,21 @@ export default function JournalPage() {
               filteredEntries.map((entry) => {
                 const moodInfo = getMoodInfo(entry.mood)
                 return (
-                  <Card key={entry.id} className="hover:shadow-md transition-shadow">
+                  <Card key={entry.id} className="card-subtle hover:shadow-lg transition-all duration-200">
                     <CardHeader>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center space-x-3">
                           <span className="text-2xl">{moodInfo.emoji}</span>
                           <div>
-                            <CardTitle className="text-lg">{entry.title}</CardTitle>
-                            <p className="text-sm text-gray-500">{format(entry.date, "MMMM d, yyyy")}</p>
+                            <CardTitle className="text-lg text-foreground">{entry.title}</CardTitle>
+                            <p className="text-sm text-muted-foreground">{format(entry.date, "MMMM d, yyyy")}</p>
                           </div>
                         </div>
                         <Badge className={moodInfo.color}>{moodInfo.label}</Badge>
                       </div>
                     </CardHeader>
                     <CardContent>
-                      <p className="text-gray-700 mb-4 leading-relaxed">{entry.content}</p>
+                      <p className="text-foreground mb-4 leading-relaxed">{entry.content}</p>
                       {entry.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">
                           {entry.tags.map((tag) => (

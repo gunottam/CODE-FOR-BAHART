@@ -1,45 +1,104 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { AlertTriangle, Phone, MessageCircle, Heart } from "lucide-react"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Phone, MessageSquare, AlertTriangle } from "lucide-react"
 
-export default function CrisisSupport() {
+const crisisResources = [
+  {
+    title: "National Suicide Prevention Lifeline",
+    description: "24/7 free and confidential support for people in distress",
+    phone: "988",
+    available: "24/7",
+    icon: Phone,
+  },
+  {
+    title: "Crisis Text Line",
+    description: "Text HOME to connect with a crisis counselor",
+    phone: "Text HOME to 741741",
+    available: "24/7",
+    icon: MessageCircle,
+  },
+  {
+    title: "Emergency Services",
+    description: "If you're in immediate danger, call emergency services",
+    phone: "911",
+    available: "24/7",
+    icon: AlertTriangle,
+  },
+]
+
+export function CrisisSupport() {
   return (
-    <section className="py-20 sm:py-32">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <Card className="mx-auto max-w-4xl border-red-200 bg-red-50">
-          <CardHeader className="text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-red-100">
-              <AlertTriangle className="h-6 w-6 text-red-600" />
+    <section className="py-20 lg:py-32 gradient-bg">
+      <div className="container">
+        <div className="text-center mb-16">
+          <div className="mb-6 flex justify-center">
+            <div className="inline-flex items-center rounded-full bg-red-100 px-4 py-2 text-sm font-medium text-red-800 dark:bg-red-900/30 dark:text-red-200">
+              <Heart className="mr-2 h-4 w-4" />
+              Crisis Support Available
             </div>
-            <CardTitle className="text-2xl font-bold text-red-900">Need immediate help?</CardTitle>
-            <p className="text-red-700">
-              If you're in crisis or having thoughts of self-harm, please reach out for immediate support
+          </div>
+          
+          <h2 className="text-3xl font-bold tracking-tight text-blue-900 sm:text-4xl dark:text-gray-100 mb-4">
+            You're not alone. Help is available 24/7.
+          </h2>
+          <p className="text-lg text-blue-700 dark:text-gray-300 max-w-3xl mx-auto">
+            If you're experiencing a mental health crisis, these resources are here to support you immediately.
+          </p>
+        </div>
+
+        <div className="grid gap-8 md:grid-cols-3">
+          {crisisResources.map((resource, index) => (
+            <Card key={index} className="gradient-card professional-shadow border-red-200 dark:border-red-800 hover:professional-shadow-lg transition-all duration-300">
+              <CardHeader className="pb-4">
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-red-100 dark:bg-red-900/30">
+                  <resource.icon className="h-6 w-6 text-red-600 dark:text-red-400" />
+                </div>
+                <CardTitle className="text-blue-900 dark:text-gray-100">
+                  {resource.title}
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <CardDescription className="text-blue-700 dark:text-gray-300 mb-4">
+                  {resource.description}
+                </CardDescription>
+                <div className="space-y-3">
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-blue-900 dark:text-gray-100">Contact:</span>
+                    <span className="text-lg font-bold text-red-600 dark:text-red-400">{resource.phone}</span>
+                  </div>
+                  <div className="flex items-center justify-between">
+                    <span className="text-sm font-medium text-blue-900 dark:text-gray-100">Available:</span>
+                    <span className="text-sm text-green-600 dark:text-green-400 font-medium">{resource.available}</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* Additional support information */}
+        <div className="mt-16 text-center">
+          <div className="max-w-2xl mx-auto">
+            <h3 className="text-2xl font-bold text-blue-900 dark:text-gray-100 mb-4">
+              Remember: Your life has value
+            </h3>
+            <p className="text-blue-700 dark:text-gray-300 mb-6">
+              If you're struggling, reaching out for help is a sign of strength, not weakness. 
+              These resources are staffed by trained professionals who want to help you.
             </p>
-          </CardHeader>
-          <CardContent className="space-y-6">
-            <div className="grid gap-4 sm:grid-cols-2">
-              <div className="flex items-center space-x-3 rounded-lg bg-white p-4">
-                <Phone className="h-5 w-5 text-red-600" />
-                <div>
-                  <div className="font-semibold text-gray-900">Crisis Hotline</div>
-                  <div className="text-sm text-gray-600">988 - Available 24/7</div>
-                </div>
-              </div>
-              <div className="flex items-center space-x-3 rounded-lg bg-white p-4">
-                <MessageSquare className="h-5 w-5 text-red-600" />
-                <div>
-                  <div className="font-semibold text-gray-900">Crisis Text Line</div>
-                  <div className="text-sm text-gray-600">Text HOME to 741741</div>
-                </div>
-              </div>
+            <div className="bg-blue-50 dark:bg-gray-800/50 rounded-lg p-6 border border-blue-200 dark:border-gray-700">
+              <h4 className="font-semibold text-blue-900 dark:text-gray-100 mb-2">
+                What to expect when you call:
+              </h4>
+              <ul className="text-sm text-blue-700 dark:text-gray-300 space-y-1 text-left max-w-md mx-auto">
+                <li>• Confidential and non-judgmental support</li>
+                <li>• Trained crisis counselors</li>
+                <li>• Immediate assistance and resources</li>
+                <li>• Help developing a safety plan if needed</li>
+              </ul>
             </div>
-            <div className="text-center">
-              <Button variant="outline" className="border-red-300 text-red-700 hover:bg-red-100 bg-transparent">
-                View All Crisis Resources
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+          </div>
+        </div>
       </div>
     </section>
   )

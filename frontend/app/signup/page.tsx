@@ -4,6 +4,7 @@ import type React from "react"
 
 import { useState } from "react"
 import Link from "next/link"
+import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
@@ -11,6 +12,8 @@ import { Label } from "@/components/ui/label"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Progress } from "@/components/ui/progress"
 import { Heart, Eye, EyeOff, Check, X } from "lucide-react"
+import { useAuth } from "@/contexts/AuthContext"
+import { useToast } from "@/hooks/use-toast"
 
 export default function SignupPage() {
   const [showPassword, setShowPassword] = useState(false)
@@ -35,11 +38,39 @@ export default function SignupPage() {
   const passwordStrength = passwordRequirements.filter((req) => req.met).length
   const passwordsMatch = formData.password && formData.confirmPassword && formData.password === formData.confirmPassword
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const { signup, isLoading } = useAuth()
+  const router = useRouter()
+  const { toast } = useToast()
+
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (passwordStrength === 4 && passwordsMatch && formData.agreeToTerms && formData.agreeToPrivacy) {
-      // Handle signup logic here
-      console.log("Signup attempt:", formData)
+      const success = await signup({
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        password: formData.password,
+      })
+      
+      if (success) {
+        toast({
+          title: "Success",
+          description: "Account created successfully!",
+        })
+        router.push("/dashboard")
+      } else {
+        toast({
+          title: "Error",
+          description: "Failed to create account. Please try again.",
+          variant: "destructive",
+        })
+      }
+    } else {
+      toast({
+        title: "Error",
+        description: "Please fill in all fields correctly and accept the terms.",
+        variant: "destructive",
+      })
     }
   }
 
@@ -221,8 +252,8 @@ export default function SignupPage() {
                 </div>
               </div>
 
-              <Button type="submit" className="w-full focus-ring" disabled={!isFormValid}>
-                Create Account
+              <Button type="submit" className="w-full focus-ring" disabled={!isFormValid || isLoading}>
+                {isLoading ? "Creating Account..." : "Create Account"}
               </Button>
             </form>
 

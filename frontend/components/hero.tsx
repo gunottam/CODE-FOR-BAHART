@@ -1,70 +1,102 @@
-import { Button } from "@/components/ui/button"
-import { ArrowRight, Heart, Shield, Users } from "lucide-react"
 import Link from "next/link"
+import { Button } from "@/components/ui/button"
+import { ArrowRight, Heart, Shield, Users, Zap } from "lucide-react"
 
-export default function Hero() {
+export function Hero() {
   return (
-    <section className="relative overflow-hidden py-20 sm:py-32">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-4xl text-center">
-          {/* Hero Badge */}
-          <div className="mb-8 inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-800">
-            <Heart className="mr-2 h-4 w-4" />
-            Your mental health matters
-          </div>
-
-          {/* Hero Title */}
-          <h1 className="text-4xl font-bold tracking-tight text-gray-900 sm:text-6xl lg:text-7xl">
-            Find peace in your{" "}
-            <span className="bg-gradient-to-r from-blue-600 to-green-600 bg-clip-text text-transparent">
-              daily journey
-            </span>
-          </h1>
-
-          {/* Hero Description */}
-          <p className="mx-auto mt-6 max-w-2xl text-lg leading-8 text-gray-600 sm:text-xl">
-            MindEase is your compassionate companion for mental wellness. Track your emotions, journal your thoughts,
-            and get AI-powered support whenever you need it.
-          </p>
-
-          {/* Hero Actions */}
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button asChild size="lg" className="w-full sm:w-auto focus-ring">
-              <Link href="/journal">
-                Start Journaling
-                <ArrowRight className="ml-2 h-5 w-5" />
-              </Link>
-            </Button>
-            <Button variant="outline" size="lg" className="w-full sm:w-auto focus-ring bg-transparent" asChild>
-              <Link href="/chatbot">Try AI Support</Link>
-            </Button>
-          </div>
-
-          {/* Trust Indicators */}
-          <div className="mt-16 grid grid-cols-1 gap-8 sm:grid-cols-3">
-            <div className="flex flex-col items-center">
-              <Shield className="h-8 w-8 text-green-600 mb-2" />
-              <h3 className="text-sm font-semibold text-gray-900">Private & Secure</h3>
-              <p className="text-sm text-gray-600">Your data is encrypted and protected</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <Users className="h-8 w-8 text-blue-600 mb-2" />
-              <h3 className="text-sm font-semibold text-gray-900">Trusted by 10k+</h3>
-              <p className="text-sm text-gray-600">Users improving their mental health</p>
-            </div>
-            <div className="flex flex-col items-center">
-              <Heart className="h-8 w-8 text-red-500 mb-2" />
-              <h3 className="text-sm font-semibold text-gray-900">24/7 Support</h3>
-              <p className="text-sm text-gray-600">AI companion always available</p>
-            </div>
-          </div>
-        </div>
+    <section className="relative overflow-hidden gradient-bg py-20 lg:py-32">
+      {/* Background decoration */}
+      <div className="absolute inset-0 overflow-hidden">
+        <div className="absolute -top-40 -right-40 h-80 w-80 rounded-full bg-blue-100/50 dark:bg-gray-800/30 blur-3xl"></div>
+        <div className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full bg-blue-200/30 dark:bg-gray-700/20 blur-3xl"></div>
       </div>
 
-      {/* Background decoration */}
-      <div className="absolute inset-0 -z-10 overflow-hidden">
-        <div className="absolute left-1/2 top-0 -translate-x-1/2 -translate-y-1/2">
-          <div className="h-[800px] w-[800px] rounded-full bg-gradient-to-br from-blue-100 to-green-100 opacity-20 blur-3xl" />
+      <div className="container relative z-10">
+        <div className="text-center">
+          <div className="mb-8 flex justify-center">
+            <div className="inline-flex items-center rounded-full bg-blue-100 px-4 py-2 text-sm font-medium text-blue-800 dark:bg-gray-800 dark:text-gray-200">
+              <Heart className="mr-2 h-4 w-4" />
+              Professional Mental Health Support
+            </div>
+          </div>
+
+          <h1 className="mb-6 text-4xl font-bold tracking-tight text-blue-900 sm:text-6xl lg:text-7xl dark:text-gray-100">
+            Your Journey to
+            <span className="block bg-gradient-to-r from-blue-600 to-blue-800 bg-clip-text text-transparent dark:from-blue-400 dark:to-blue-600">
+              Mental Wellness
+            </span>
+            Starts Here
+          </h1>
+
+          <p className="mb-8 text-lg text-blue-700 dark:text-gray-300 sm:text-xl max-w-3xl mx-auto">
+            Experience professional mental health support with AI-powered tools, 
+            personalized journaling, and comprehensive resources designed for your well-being.
+          </p>
+
+          <div className="flex flex-col items-center justify-center gap-4 sm:flex-row">
+            <Link href="/signup">
+              <Button size="lg" className="group">
+                Start Your Journey
+                <ArrowRight className="ml-2 h-4 w-4 transition-transform group-hover:translate-x-1" />
+              </Button>
+            </Link>
+            <Link href="/resources">
+              <Button variant="outline" size="lg">
+                Explore Resources
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        {/* Features grid */}
+        <div className="mt-20 grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-gray-800">
+              <Heart className="h-6 w-6 text-blue-600 dark:text-gray-400" />
+            </div>
+            <h3 className="mb-2 text-lg font-semibold text-blue-900 dark:text-gray-100">
+              Compassionate Care
+            </h3>
+            <p className="text-sm text-blue-700 dark:text-gray-300">
+              Professional support designed with empathy and understanding
+            </p>
+          </div>
+
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-gray-800">
+              <Zap className="h-6 w-6 text-blue-600 dark:text-gray-400" />
+            </div>
+            <h3 className="mb-2 text-lg font-semibold text-blue-900 dark:text-gray-100">
+              AI-Powered Insights
+            </h3>
+            <p className="text-sm text-blue-700 dark:text-gray-300">
+              Advanced technology for personalized mental health guidance
+            </p>
+          </div>
+
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-gray-800">
+              <Shield className="h-6 w-6 text-blue-600 dark:text-gray-400" />
+            </div>
+            <h3 className="mb-2 text-lg font-semibold text-blue-900 dark:text-gray-100">
+              Privacy First
+            </h3>
+            <p className="text-sm text-blue-700 dark:text-gray-300">
+              Your data is protected with enterprise-grade security
+            </p>
+          </div>
+
+          <div className="text-center">
+            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-lg bg-blue-100 dark:bg-gray-800">
+              <Users className="h-6 w-6 text-blue-600 dark:text-gray-400" />
+            </div>
+            <h3 className="mb-2 text-lg font-semibold text-blue-900 dark:text-gray-100">
+              Community Support
+            </h3>
+            <p className="text-sm text-blue-700 dark:text-gray-300">
+              Connect with others on similar wellness journeys
+            </p>
+          </div>
         </div>
       </div>
     </section>

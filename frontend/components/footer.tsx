@@ -1,80 +1,123 @@
 import Link from "next/link"
-import { Heart } from "lucide-react"
+import { Heart, Shield, Users, Zap, AlertTriangle } from "lucide-react"
 
-export default function Footer() {
+const footerLinks = {
+  product: [
+    { name: "Dashboard", href: "/dashboard" },
+    { name: "Journal", href: "/journal" },
+    { name: "AI Support", href: "/chatbot" },
+    { name: "Resources", href: "/resources" },
+  ],
+  support: [
+    { name: "Help Center", href: "/help" },
+    { name: "Contact Us", href: "/contact" },
+    { name: "Privacy Policy", href: "/privacy" },
+    { name: "Terms of Service", href: "/terms" },
+  ],
+  company: [
+    { name: "About Us", href: "/about" },
+    { name: "Careers", href: "/careers" },
+    { name: "Blog", href: "/blog" },
+    { name: "Press", href: "/press" },
+  ],
+}
+
+export function Footer() {
   return (
-    <footer className="bg-gray-900 text-white">
-      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-8">
-          {/* Brand */}
-          <div className="col-span-1 md:col-span-2">
+    <footer className="border-t border-blue-200 bg-white dark:border-gray-700 dark:bg-gray-900">
+      <div className="container py-12 lg:py-16">
+        <div className="grid gap-8 lg:grid-cols-4">
+          {/* Brand section */}
+          <div className="lg:col-span-1">
             <Link href="/" className="flex items-center space-x-2 mb-4">
-              <Heart className="h-8 w-8 text-blue-400" />
-              <span className="text-xl font-bold">MindEase</span>
+              <Heart className="h-8 w-8 text-blue-600 dark:text-blue-400" />
+              <span className="text-xl font-bold text-blue-900 dark:text-gray-100">MindEase</span>
             </Link>
-            <p className="text-gray-400 max-w-md">
-              Your compassionate companion for mental wellness. Supporting your journey to better mental health with
-              privacy, empathy, and evidence-based tools.
+            <p className="text-blue-700 dark:text-gray-300 mb-6 max-w-sm">
+              Professional mental health support powered by AI. Your journey to wellness starts here.
             </p>
+            <div className="flex space-x-4">
+              <div className="flex items-center space-x-2 text-sm text-blue-600 dark:text-gray-400">
+                <Shield className="h-4 w-4" />
+                <span>HIPAA Compliant</span>
+              </div>
+            </div>
           </div>
 
-          {/* Quick Links */}
+          {/* Product links */}
           <div>
-            <h3 className="font-semibold mb-4">Quick Links</h3>
-            <ul className="space-y-2 text-gray-400">
-              <li>
-                <Link href="/journal" className="hover:text-white transition-colors">
-                  Journal
-                </Link>
-              </li>
-              <li>
-                <Link href="/chatbot" className="hover:text-white transition-colors">
-                  AI Support
-                </Link>
-              </li>
-              <li>
-                <Link href="/dashboard" className="hover:text-white transition-colors">
-                  Dashboard
-                </Link>
-              </li>
-              <li>
-                <Link href="/resources" className="hover:text-white transition-colors">
-                  Resources
-                </Link>
-              </li>
+            <h3 className="font-semibold text-blue-900 dark:text-gray-100 mb-4">Product</h3>
+            <ul className="space-y-3">
+              {footerLinks.product.map((link) => (
+                <li key={link.name}>
+                  <Link 
+                    href={link.href}
+                    className="text-blue-700 hover:text-blue-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
 
-          {/* Support */}
+          {/* Support links */}
           <div>
-            <h3 className="font-semibold mb-4">Support</h3>
-            <ul className="space-y-2 text-gray-400">
-              <li>
-                <Link href="/help" className="hover:text-white transition-colors">
-                  Help Center
-                </Link>
-              </li>
-              <li>
-                <Link href="/privacy" className="hover:text-white transition-colors">
-                  Privacy Policy
-                </Link>
-              </li>
-              <li>
-                <Link href="/terms" className="hover:text-white transition-colors">
-                  Terms of Service
-                </Link>
-              </li>
-              <li>
-                <Link href="/contact" className="hover:text-white transition-colors">
-                  Contact Us
-                </Link>
-              </li>
+            <h3 className="font-semibold text-blue-900 dark:text-gray-100 mb-4">Support</h3>
+            <ul className="space-y-3">
+              {footerLinks.support.map((link) => (
+                <li key={link.name}>
+                  <Link 
+                    href={link.href}
+                    className="text-blue-700 hover:text-blue-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          {/* Company links */}
+          <div>
+            <h3 className="font-semibold text-blue-900 dark:text-gray-100 mb-4">Company</h3>
+            <ul className="space-y-3">
+              {footerLinks.company.map((link) => (
+                <li key={link.name}>
+                  <Link 
+                    href={link.href}
+                    className="text-blue-700 hover:text-blue-900 dark:text-gray-300 dark:hover:text-gray-100 transition-colors"
+                  >
+                    {link.name}
+                  </Link>
+                </li>
+              ))}
             </ul>
           </div>
         </div>
 
-        <div className="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-          <p>&copy; 2024 MindEase. Made with ❤️ for mental health awareness.</p>
+        {/* Bottom section */}
+        <div className="mt-12 pt-8 border-t border-blue-200 dark:border-gray-700">
+          <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
+            <div className="flex items-center space-x-2 text-sm text-blue-700 dark:text-gray-300">
+              <Heart className="h-4 w-4 text-red-500" />
+              <span>Made with care for mental wellness</span>
+            </div>
+            <div className="flex items-center space-x-6 text-sm text-blue-700 dark:text-gray-300">
+              <span>© 2024 MindEase. All rights reserved.</span>
+            </div>
+          </div>
+        </div>
+
+        {/* Crisis support reminder */}
+        <div className="mt-8 p-4 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+          <div className="flex items-center justify-center space-x-2 text-sm text-red-800 dark:text-red-200">
+            <AlertTriangle className="h-4 w-4" />
+            <span>
+              <strong>Crisis Support:</strong> If you're in crisis, call{" "}
+              <a href="tel:988" className="font-semibold underline">988</a> or text HOME to 741741
+            </span>
+          </div>
         </div>
       </div>
     </footer>
