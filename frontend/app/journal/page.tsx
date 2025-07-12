@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import Header from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
@@ -12,6 +12,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { CalendarIcon, Plus, Search, Filter } from "lucide-react"
 import { format } from "date-fns"
+import { useRouter } from "next/navigation"
 
 const moodEmojis = [
   { value: 1, emoji: "😢", label: "Very Sad", color: "mood-very-sad" },
@@ -66,8 +67,25 @@ const sampleEntries = [
   },
 ]
 
+// Get user from localStorage
+const getUserId = () => {
+  if (typeof window !== "undefined") {
+    const user = localStorage.getItem("user");
+    if (user) {
+      try {
+        return JSON.parse(user)._id;
+      } catch {
+        return null;
+      }
+    }
+  }
+  return null;
+};
+
+const BACKEND_URL = "http://localhost:5000";
+
 export default function JournalPage() {
-  const [entries, setEntries] = useState(sampleEntries)
+  const [entries, setEntries] = useState<any[]>([])
   const [isWriting, setIsWriting] = useState(false)
   const [selectedDate, setSelectedDate] = useState<Date>()
   const [newEntry, setNewEntry] = useState({
@@ -78,37 +96,104 @@ export default function JournalPage() {
   })
   const [searchTerm, setSearchTerm] = useState("")
   const [filterMood, setFilterMood] = useState<string>("all")
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
-  const handleSaveEntry = () => {
-    if (newEntry.title.trim() && newEntry.content.trim()) {
-      const entry = {
-        id: entries.length + 1,
-        date: selectedDate || new Date(),
-        mood: newEntry.mood,
-        title: newEntry.title,
-        content: newEntry.content,
-        tags: newEntry.tags,
+  // Route protection: redirect to login if not logged in
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const user = localStorage.getItem("user");
+      if (!user) {
+        window.location.href = "/login";
       }
-      setEntries([entry, ...entries])
-      setNewEntry({ title: "", content: "", mood: 3, tags: [] })
-      setIsWriting(false)
-      setSelectedDate(undefined)
+    }
+  }, [])
+
+  const USER_ID = getUserId();
+
+  // Fetch entries from backend
+  useEffect(() => {
+    if (!USER_ID) return;
+    const fetchEntries = async () => {
+      setLoading(true)
+      setError(null)
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/journal/user/${USER_ID}`)
+        if (!res.ok) throw new Error("Failed to fetch entries")
+        const data = await res.json()
+        setEntries(
+          data.map((entry: any) => ({
+            ...entry,
+            date: new Date(entry.date),
+            id: entry._id || entry.id,
+          }))
+        )
+      } catch (err) {
+        setError("Could not load journal entries.")
+      } finally {
+        setLoading(false)
+      }
+    }
+    fetchEntries()
+  }, [USER_ID])
+
+  const handleSaveEntry = async () => {
+    if (!USER_ID) return;
+    if (newEntry.title.trim() && newEntry.content.trim()) {
+      setLoading(true)
+      setError(null)
+      try {
+        const res = await fetch(`${BACKEND_URL}/api/journal/add`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            userId: USER_ID,
+            title: newEntry.title,
+            content: newEntry.content,
+            mood: newEntry.mood,
+            tags: newEntry.tags,
+            date: selectedDate || new Date(),
+          }),
+        })
+        if (!res.ok) throw new Error("Failed to save entry")
+        // Optionally, you can get the new entry from res.json()
+        // Refresh entries
+        const refreshed = await fetch(`${BACKEND_URL}/api/journal/user/${USER_ID}`)
+        const refreshedData = await refreshed.json()
+        setEntries(
+          refreshedData.map((entry: any) => ({
+            ...entry,
+            date: new Date(entry.date),
+            id: entry._id || entry.id,
+          }))
+        )
+        setNewEntry({ title: "", content: "", mood: 3, tags: [] })
+        setIsWriting(false)
+        setSelectedDate(undefined)
+      } catch (err) {
+        setError("Could not save entry.")
+      } finally {
+        setLoading(false)
+      }
     }
   }
 
+  // Fix linter error: explicitly type 'tag' as string
   const toggleTag = (tag: string) => {
     setNewEntry((prev) => ({
       ...prev,
-      tags: prev.tags.includes(tag) ? prev.tags.filter((t) => t !== tag) : [...prev.tags, tag],
+      tags: prev.tags.includes(tag) ? prev.tags.filter((t: string) => t !== tag) : [...prev.tags, tag],
     }))
   }
 
   const filteredEntries = entries.filter((entry) => {
+    const title = entry.title || "";
+    const content = entry.content || "";
     const matchesSearch =
-      entry.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      entry.content.toLowerCase().includes(searchTerm.toLowerCase())
-    const matchesMood = filterMood === "all" || entry.mood.toString() === filterMood
-    return matchesSearch && matchesMood
+      title.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      content.toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesMood = filterMood === "all" || entry.mood.toString() === filterMood;
+    return matchesSearch && matchesMood;
   })
 
   const getMoodInfo = (mood: number) => {
@@ -215,7 +300,7 @@ export default function JournalPage() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">Mood Tags</label>
                   <div className="flex flex-wrap gap-2">
-                    {moodTags.map((tag) => (
+                    {moodTags.map((tag: string) => (
                       <button
                         key={tag}
                         onClick={() => toggleTag(tag)}
@@ -280,7 +365,15 @@ export default function JournalPage() {
 
           {/* Entries List */}
           <div className="space-y-6">
-            {filteredEntries.length === 0 ? (
+            {loading ? (
+              <Card>
+                <CardContent className="p-8 text-center text-gray-500">Loading entries...</CardContent>
+              </Card>
+            ) : error ? (
+              <Card>
+                <CardContent className="p-8 text-center text-red-500">{error}</CardContent>
+              </Card>
+            ) : filteredEntries.length === 0 ? (
               <Card>
                 <CardContent className="p-8 text-center text-gray-500">
                   {searchTerm || filterMood
@@ -309,7 +402,7 @@ export default function JournalPage() {
                       <p className="text-gray-700 mb-4 leading-relaxed">{entry.content}</p>
                       {entry.tags.length > 0 && (
                         <div className="flex flex-wrap gap-2">
-                          {entry.tags.map((tag) => (
+                          {entry.tags.map((tag: string) => (
                             <Badge key={tag} variant="secondary" className="text-xs">
                               {tag}
                             </Badge>
