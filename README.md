@@ -1,101 +1,122 @@
-🧠 MindEase – Mental Health Journal & AI Chatbot
+# 🧠 MindEase – Mental Health Journal & AI Chatbot
 
-MindEase is a modern, full-stack web application dedicated to promoting mental wellness through journaling, mood tracking, AI-powered conversations, and access to personalized resources. It creates a private, supportive space for users to reflect, express themselves, and seek guidance — anytime, anywhere.
+**MindEase** is a modern, full-stack web application dedicated to promoting mental wellness through journaling, mood tracking, AI-powered conversations, and access to personalized resources. It creates a private, supportive space for users to reflect, express themselves, and seek guidance — anytime, anywhere.
 
-🌟 Features
+---
 
-✍️ Private Journaling
-Securely write and revisit your thoughts and feelings over time.
+## 🌟 Features
 
-📊 Mood Tracking
-Log daily moods and visualize emotional patterns through charts.
+* ✍️ **Private Journaling**
+  Securely write and revisit your thoughts and feelings over time.
 
-🤖 AI-Powered Chatbot
-Engage in real-time, empathetic conversations powered by artificial intelligence.
+* 📊 **Mood Tracking**
+  Log daily moods and visualize emotional patterns through charts.
 
-📚 Personalized Resource Library
-Access curated articles, mental health tips, exercises, and tools.
+* 🤖 **AI-Powered Chatbot**
+  Engage in real-time, empathetic conversations powered by artificial intelligence.
 
-💬 Community Feedback System
-Anonymously view and share experiences with others to foster connection and support.
+* 📚 **Personalized Resource Library**
+  Access curated articles, mental health tips, exercises, and tools.
 
-🚨 Crisis Support Access
-Quick access to emergency mental health resources and helpline information.
+* 💬 **Community Feedback System**
+  Anonymously view and share experiences to foster connection and support.
 
-🌙 Responsive UI with Dark Mode
-Visually calming design, optimized for all devices with support for both light and dark themes.
+* 🚨 **Crisis Support Access**
+  Quick access to emergency mental health resources and helplines.
 
-⚙️ Tech Stack
+* 🌙 **Responsive UI with Dark Mode**
+  Visually calming design, optimized for all devices with support for both light and dark themes.
 
-🖥 Frontend
+---
 
-Next.js – React-based framework for fast rendering and routing
+## ⚙️ Tech Stack
 
-React – Component-based UI library
+### 🖥 Frontend
 
-Tailwind CSS – Utility-first CSS framework for clean, responsive design
+* **Next.js** – React-based framework for fast rendering and routing
+* **React** – Component-based UI library
+* **Tailwind CSS** – Utility-first CSS framework
+* **Dark Mode Support** – Enhances comfort and accessibility
 
-Dark Mode Support – Enhances user comfort and accessibility
+### 🗄 Backend
 
-🗄 Backend
+* **Node.js** – JavaScript runtime for backend logic
+* **Express.js** – Minimalist API framework
+* **MongoDB** – NoSQL database for journals, moods, and resources
+* **Mongoose** – ODM for MongoDB integration
 
-Node.js – JavaScript runtime for backend logic
+### 🔐 Authentication & Security
 
-Express.js – Fast and minimalist backend API framework
+* **JWT / Sessions** – Secure authentication
+* **Environment Variables** – Managed using `.env`
+* **Input Validation & Sanitization** – Protects against security threats
 
-MongoDB – NoSQL database for storing user journals, moods, and resources
+---
 
-Mongoose – ODM to interact with MongoDB easily
+## 🚀 How to Run the Project
 
-🔐 Authentication & Security
-JWT / Sessions – Secure user authentication system
+### 📦 Prerequisites
 
-Environment Variables – Secrets managed using .env
+* Node.js and npm installed
+* Python 3 installed
+* MongoDB instance running (local or MongoDB Atlas)
+* Groq API key (for chatbot integration)
 
-Input Validation & Sanitization – Protection against injections
+---
 
-🛠️ Installation & Setup
-📦 Prerequisites
-Node.js & npm installed
+### 🔧 Step-by-Step Setup
 
-MongoDB instance running (local or cloud via MongoDB Atlas)
+1. **Clone the Repository**
 
-📁 Clone the Repository
+   ```bash
+   git clone https://github.com/your-username/mindease.git
+   cd mindease
+   ```
 
-git clone https://github.com/your-username/mindease.git
+2. **Start Backend Server**
 
-cd mindease
+   ```bash
+   cd backend
+   npm install
+   npm run dev
+   ```
 
-🔧 Setup Environment Variables
+3. **Run AI Chatbot Server**
 
-Create a .env file in the root directory with the following:
+   ```bash
+   cd chatbot
+   export GROQ_API_KEY=your_key_here  # Use 'set GROQ_API_KEY=your_key_here' on Windows
+   python test.py
+   ```
 
-MONGO_URI=your_mongodb_connection_string
-JWT_SECRET=your_jwt_secret_key
+4. **Start Frontend**
 
-📥 Install Dependencies
+   ```bash
+   cd frontend
+   npm install
+   # On macOS/Linux:
+   PORT=3000 npm run dev
+   # On Windows:
+   npm run dev
+   ```
 
-npm install
+5. **Visit the App**
+   Open your browser and go to:
+   **[http://localhost:3000](http://localhost:3000)**
 
-▶️ Run the App
+---
 
-npm run dev
+## 👨‍💻 Team
 
-App will be running locally at http://localhost:3000
+| Name               | Role                   | Email                                                         |
+| ------------------ | ---------------------- | ------------------------------------------------------------- |
+| Dishant Dhyani     | Frontend Developer     | [dishantdhyani01@gmail.com](mailto:dishantdhyani01@gmail.com) |
+| Gunottam Maini     | AI Chatbot Integration | [gunottammaini@gmail.com](mailto:gunottammaini@gmail.com)     |
+| Satyam Singh Rawat | Backend Developer      | [rawatsatyam058@gmail.com](mailto:rawatsatyam058@gmail.com)   |
+| Harshit Negi       | Backend Developer      | [negiharshit89@gmail.com](mailto:negiharshit89@gmail.com)     |
 
-👨‍💻 Team
+---
 
-Dishant Dhyani	Frontend Developer	dishantdhyani01@gmail.com
+## 🔒 Privacy & Philosophy
 
-Gunottam Maini	AI Chatbot Integration	gunottammaini@gmail.com
-
-Satyam Singh Rawat	Backend Developer	rawatsatyam058@gmail.com
-
-Harshit Negi	Backend Developer	negiharshit89@gmail.com
-
-🔒 Privacy & Philosophy
-MindEase is built with the belief that mental health tools should be private, non-judgmental, and easily accessible. 
-Every feature is designed to empower users in their emotional journey while respecting their confidentiality and autonomy.
-
-📄 License
-This project is licensed under the MIT License.
+MindEase is built on the principle that mental health support should be **private, non-judgmental, and accessible**. Every feature is designed to empower users on their emotional journey while protecting their data and autonomy.
