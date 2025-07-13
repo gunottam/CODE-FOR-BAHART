@@ -84,7 +84,6 @@
 3. **Run AI Chatbot Server**
 
    ```bash
-   cd chatbot
    export GROQ_API_KEY=your_key_here  # Use 'set GROQ_API_KEY=your_key_here' on Windows
    python test.py
    ```
