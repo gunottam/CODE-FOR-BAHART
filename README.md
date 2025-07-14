@@ -69,8 +69,8 @@
 1. **Clone the Repository**
 
    ```bash
-   git clone https://github.com/your-username/mindease.git
-   cd mindease
+   git clone https://github.com/gunottam/CODE-FOR-BHARAT.git
+   cd CODE-FOR-BHARAT
    ```
 
 2. **Start Backend Server**
