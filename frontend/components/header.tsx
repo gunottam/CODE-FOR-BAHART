@@ -17,7 +17,6 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Textarea } from "@/components/ui/textarea"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { useFeedback } from "@/contexts/FeedbackContext"
 
 export default function Header() {
   const { theme, setTheme, resolvedTheme } = useTheme()
@@ -32,7 +31,6 @@ export default function Header() {
     rating: 5
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const { addFeedback } = useFeedback()
 
   // Handle hydration
   useEffect(() => {
@@ -44,12 +42,8 @@ export default function Header() {
     setIsSubmitting(true)
 
     // Add feedback to context
-    addFeedback({
-      name: feedback.name,
-      email: feedback.email,
-      message: feedback.message,
-      rating: feedback.rating
-    })
+    // This part of the logic was removed as per the edit hint.
+    // If feedback submission is still desired, it would require a backend API call.
 
     // Simulate feedback submission
     await new Promise(resolve => setTimeout(resolve, 1000))

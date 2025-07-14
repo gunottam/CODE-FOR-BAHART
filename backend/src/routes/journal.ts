@@ -1,5 +1,6 @@
 import express from 'express';
 import JournalEntry from '../models/JournalEntry';
+import mongoose from 'mongoose';
 
 const router = express.Router();
 
@@ -23,7 +24,8 @@ router.post('/add', async (req, res) => {
 // Get all journal entries for a user
 router.get('/user/:userId', async (req, res) => {
   try {
-    const entries = await JournalEntry.find({ userId: req.params.userId });
+    const userId = new mongoose.Types.ObjectId(req.params.userId);
+    const entries = await JournalEntry.find({ userId });
     res.json(entries);
   } catch (err) {
     if (err instanceof Error) {

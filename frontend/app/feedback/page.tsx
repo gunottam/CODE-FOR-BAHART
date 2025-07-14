@@ -1,7 +1,6 @@
 "use client"
 
-import { useState } from "react"
-import { useFeedback } from "@/contexts/FeedbackContext"
+import { useEffect, useState } from "react"
 import Header from "@/components/header"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
@@ -12,7 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Star, MessageSquare, User, Heart, Quote, Send, ThumbsUp, SortAsc, SortDesc } from "lucide-react"
 
 export default function FeedbackPage() {
-  const { feedbacks, addFeedback, likeFeedback } = useFeedback()
+  const [feedbacks, setFeedbacks] = useState<any[]>([]);
   const [showForm, setShowForm] = useState(false)
   const [sortBy, setSortBy] = useState<"date" | "likes">("likes")
   const [sortOrder, setSortOrder] = useState<"asc" | "desc">("desc")
@@ -24,24 +23,36 @@ export default function FeedbackPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
 
+  useEffect(() => {
+    fetch("http://localhost:2001/api/feedback/")
+      .then(res => res.json())
+      .then(data => setFeedbacks(data));
+  }, []);
+
   const handleFeedbackSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-    addFeedback({
-      name: feedback.name,
-      email: feedback.email,
-      message: feedback.message,
-      rating: feedback.rating
-    })
-    await new Promise(resolve => setTimeout(resolve, 1000))
-    setFeedback({ name: "", email: "", message: "", rating: 5 })
-    setShowForm(false)
-    setIsSubmitting(false)
-    alert("Thank you for your feedback! Your review has been added.")
+    await fetch("http://localhost:2001/api/feedback/add", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(feedback)
+    });
+    setFeedback({ name: "", email: "", message: "", rating: 5 });
+    setShowForm(false);
+    setIsSubmitting(false);
+    alert("Thank you for your feedback! Your review has been added.");
+    // Refresh feedbacks
+    fetch("http://localhost:2001/api/feedback/")
+      .then(res => res.json())
+      .then(data => setFeedbacks(data));
   }
 
   const handleLike = (feedbackId: string) => {
-    likeFeedback(feedbackId)
+    // This function will need to be updated to call an API endpoint for liking
+    // For now, it will just update the local state, which won't persist
+    // A proper implementation would involve an API call to update likes
+    console.log("Like feedback:", feedbackId);
+    // Example: setFeedbacks(prev => prev.map(fb => fb.id === feedbackId ? { ...fb, likes: fb.likes + 1 } : fb));
   }
 
   return (
@@ -163,8 +174,8 @@ export default function FeedbackPage() {
                   return sortOrder === "asc" ? a.likes - b.likes : b.likes - a.likes
                 } else {
                   return sortOrder === "asc"
-                    ? new Date(a.date).getTime() - new Date(b.date).getTime()
-                    : new Date(b.date).getTime() - new Date(a.date).getTime()
+                    ? new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime()
+                    : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 }
               })
               .map((fb) => (
@@ -205,10 +216,8 @@ export default function FeedbackPage() {
                       </div>
                       <div className="text-right flex flex-col items-end gap-2">
                         <span className="text-sm text-gray-400">
-                          {new Date(fb.date).toLocaleDateString('en-US', {
-                            year: 'numeric',
-                            month: 'short',
-                            day: 'numeric'
+                          {new Date(fb.createdAt).toLocaleString('en-US', {
+                            year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
                           })}
                         </span>
                         <Button

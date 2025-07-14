@@ -1,12 +1,17 @@
 "use client"
 
-import { useFeedback } from "@/contexts/FeedbackContext"
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card"
 import { Star, MessageSquare, User, Heart, Quote } from "lucide-react"
 
 export default function UserFeedback() {
-  const { getTopFeedbacks } = useFeedback()
-  const topFeedbacks = getTopFeedbacks(4)
+  const [feedbacks, setFeedbacks] = useState<any[]>([]);
+  useEffect(() => {
+    fetch("http://localhost:2001/api/feedback/")
+      .then(res => res.json())
+      .then(data => setFeedbacks(data));
+  }, []);
+  const topFeedbacks = feedbacks.slice(0, 4);
 
   if (topFeedbacks.length === 0) {
     return (
@@ -59,8 +64,8 @@ export default function UserFeedback() {
 
         {/* Feedback Cards Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-12">
-          {topFeedbacks.map((feedback, index) => (
-            <Card key={feedback.id} className="group glassmorphism border border-gray-200/50 dark:border-white/20 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:-translate-y-1 scale-hover">
+          {topFeedbacks.map((feedback) => (
+            <Card key={feedback._id} className="group glassmorphism border border-gray-200/50 dark:border-white/20 shadow-lg hover:shadow-xl hover:shadow-purple-500/25 transition-all duration-300 transform hover:-translate-y-1 scale-hover">
               <CardContent className="p-8">
                 {/* Quote Icon */}
                 <div className="flex justify-between items-start mb-4">
@@ -101,10 +106,8 @@ export default function UserFeedback() {
                   </div>
                   <div className="text-right">
                     <span className="text-sm text-gray-400">
-                      {new Date(feedback.date).toLocaleDateString('en-US', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
+                      {new Date(feedback.createdAt).toLocaleString('en-US', {
+                        year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit'
                       })}
                     </span>
                   </div>
