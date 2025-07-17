@@ -178,8 +178,8 @@ export default function FeedbackPage() {
                     : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
                 }
               })
-              .map((fb) => (
-                <Card key={fb.id} className="glassmorphism border-gray-200/50 dark:border-white/20 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 scale-hover">
+              .map((fb, idx) => (
+                <Card key={fb.id ?? idx} className="glassmorphism border-gray-200/50 dark:border-white/20 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 scale-hover">
                   <CardContent className="p-6">
                     <div className="flex justify-between items-start mb-4">
                       <Quote className="h-8 w-8 text-purple-400 opacity-60" />

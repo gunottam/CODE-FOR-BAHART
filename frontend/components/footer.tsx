@@ -1,7 +1,12 @@
+"use client"
+
 import Link from "next/link"
 import { Heart } from "lucide-react"
+import { Dialog, DialogTrigger, DialogContent, DialogTitle } from "@/components/ui/dialog"
+import { useState } from "react"
 
 export default function Footer() {
+  const [open, setOpen] = useState(false)
   return (
     <footer className="w-full bg-gray-900 text-white border-t border-gray-800">
       <div className="w-full py-6 px-4 sm:px-6 lg:px-8">
@@ -16,23 +21,40 @@ export default function Footer() {
 
             {/* Quick links */}
             <div className="flex items-center space-x-6 text-sm">
-              <Link href="/help" className="text-gray-300 hover:text-white transition-colors">
-                Help
-              </Link>
-              <Link href="/privacy" className="text-gray-300 hover:text-white transition-colors">
-                Privacy
-              </Link>
-              <Link href="/terms" className="text-gray-300 hover:text-white transition-colors">
-                Terms
-              </Link>
-              <Link href="/contact" className="text-gray-300 hover:text-white transition-colors">
-                Contact
-              </Link>
+              <span className="text-gray-500 cursor-not-allowed select-none opacity-60">Help</span>
+              <span className="text-gray-500 cursor-not-allowed select-none opacity-60">Privacy</span>
+              <span className="text-gray-500 cursor-not-allowed select-none opacity-60">Terms</span>
+              <Dialog open={open} onOpenChange={setOpen}>
+                <DialogTrigger asChild>
+                  <button className="text-gray-300 hover:text-white transition-colors focus:outline-none" onClick={() => setOpen(true)}>
+                    Contact
+                  </button>
+                </DialogTrigger>
+                <DialogContent className="bg-gray-900 border border-gray-700 text-white">
+                  <DialogTitle className="mb-2">Contact Us</DialogTitle>
+                  <div className="space-y-3">
+                    <div>
+                      <span className="font-semibold">Phone Number:</span> <span className="text-gray-300">+91 9415911058</span>
+                    </div>
+                    <div>
+                      <span className="font-semibold">Email ID:</span> {" "}
+                      <a
+                        href="https://mail.google.com/mail/?view=cm&fs=1&to=rawatsatyam058@gmail.com"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-blue-400 underline hover:text-blue-300"
+                      >
+                        rawatsatyam058@gmail.com
+                      </a>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
             </div>
 
             {/* Copyright */}
             <div className="text-xs text-gray-400">
-              © 2024 MindEase. All rights reserved.
+              © 2025 MindEase. All rights reserved.
             </div>
           </div>
 

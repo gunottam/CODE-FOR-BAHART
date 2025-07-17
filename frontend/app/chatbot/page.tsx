@@ -2,12 +2,13 @@
 
 import type React from "react"
 
-import { useState } from "react"
+import { useRef, useEffect, useState } from "react"
 import Header from "@/components/header"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Input } from "@/components/ui/input"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import * as ScrollAreaPrimitive from "@radix-ui/react-scroll-area"
 import { Send, Bot, User, Heart, AlertTriangle, Phone } from "lucide-react"
 import { toast } from "sonner"
 
@@ -42,6 +43,31 @@ export default function ChatbotPage() {
   ])
   const [inputValue, setInputValue] = useState("")
   const [isTyping, setIsTyping] = useState(false)
+  const [showScrollButton, setShowScrollButton] = useState(false)
+  // Attach ref directly to the ScrollArea viewport
+  const scrollAreaViewportRef = useRef<HTMLDivElement>(null)
+  const endOfMessagesRef = useRef<HTMLDivElement>(null)
+  const messagesContainerRef = useRef<HTMLDivElement>(null)
+
+  // Auto-scroll to bottom when messages change (robust)
+  useEffect(() => {
+    if (endOfMessagesRef.current) {
+      endOfMessagesRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [messages.length]);
+
+  // Show/hide scroll-to-bottom button
+  useEffect(() => {
+    const scrollArea = scrollAreaViewportRef.current
+    if (!scrollArea) return
+    const handleScroll = () => {
+      const { scrollTop, scrollHeight, clientHeight } = scrollArea
+      setShowScrollButton(scrollTop + clientHeight < scrollHeight - 40)
+    }
+    scrollArea.addEventListener('scroll', handleScroll)
+    handleScroll()
+    return () => scrollArea.removeEventListener('scroll', handleScroll)
+  }, [messages])
 
   const detectCrisis = (message: string): boolean => {
     return crisisKeywords.some((keyword) => message.toLowerCase().includes(keyword.toLowerCase()))
@@ -139,14 +165,16 @@ export default function ChatbotPage() {
                       support, call 988 or text HOME to 741741.
                     </p>
                   </div>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    className="btn-glass-light dark:btn-glass border-red-300/50 dark:border-red-400/30 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
-                  >
-                    <Phone className="h-4 w-4 mr-1" />
-                    Get Help
-                  </Button>
+                  <a href="tel:911">
+                    <Button
+                      variant="outline"
+                      size="sm"
+                      className="btn-glass-light dark:btn-glass border-red-300/50 dark:border-red-400/30 text-red-600 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300"
+                    >
+                      <Phone className="h-4 w-4 mr-1" />
+                      Get Help
+                    </Button>
+                  </a>
                 </div>
               </CardContent>
             </Card>
@@ -194,37 +222,44 @@ export default function ChatbotPage() {
 
                   {/* Messages */}
                   <ScrollArea className="flex-1 p-4">
-                    <div className="space-y-4">
-                      {messages.map((message) => (
-                        <div
-                          key={message.id}
-                          className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
-                        >
+                    <ScrollAreaPrimitive.Viewport
+                      ref={scrollAreaViewportRef}
+                      className="h-full w-full rounded-[inherit]"
+                      style={{ height: "100%" }}
+                    >
+                      <div className="space-y-4 h-full relative">
+                        {messages.map((message) => (
                           <div
-                            className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${message.sender === "user"
-                              ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
-                              : "glassmorphism border border-gray-200/50 dark:border-white/20 text-gray-900 dark:text-white"
-                              }`}
+                            key={message.id}
+                            className={`flex ${message.sender === "user" ? "justify-end" : "justify-start"}`}
                           >
-                            <p className="text-sm">{message.content}</p>
-                            <p className="text-xs opacity-70 mt-1">
-                              {message.timestamp.toLocaleTimeString()}
-                            </p>
-                          </div>
-                        </div>
-                      ))}
-                      {isTyping && (
-                        <div className="flex justify-start">
-                          <div className="glassmorphism border border-gray-200/50 dark:border-white/20 px-4 py-2 rounded-lg">
-                            <div className="flex space-x-1">
-                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
-                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
-                              <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                            <div
+                              className={`max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${message.sender === "user"
+                                ? "bg-gradient-to-r from-purple-500 to-pink-500 text-white"
+                                : "glassmorphism border border-gray-200/50 dark:border-white/20 text-gray-900 dark:text-white"
+                                }`}
+                            >
+                              <p className="text-sm">{message.content}</p>
+                              <p className="text-xs opacity-70 mt-1">
+                                {message.timestamp.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })}
+                              </p>
                             </div>
                           </div>
-                        </div>
-                      )}
-                    </div>
+                        ))}
+                        {isTyping && (
+                          <div className="flex justify-start">
+                            <div className="glassmorphism border border-gray-200/50 dark:border-white/20 px-4 py-2 rounded-lg">
+                              <div className="flex space-x-1">
+                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
+                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.1s' }}></div>
+                                <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
+                              </div>
+                            </div>
+                          </div>
+                        )}
+                        <div ref={endOfMessagesRef} />
+                      </div>
+                    </ScrollAreaPrimitive.Viewport>
                   </ScrollArea>
 
                   {/* Input */}

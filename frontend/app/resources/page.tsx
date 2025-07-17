@@ -177,20 +177,22 @@ export default function ResourcesPage() {
         <div className="max-w-5xl mx-auto">
           <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-6 text-center">Mental Health Resources</h1>
           <div className="mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
-            <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-full">
-              <TabsList className="flex flex-wrap gap-2 justify-center glassmorphism p-2">
-                {categories.map((cat) => (
-                  <TabsTrigger
-                    key={cat.id}
-                    value={cat.id}
-                    className="flex items-center gap-2 px-4 py-2 rounded-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 focus-ring"
-                  >
-                    <cat.icon className="h-4 w-4" aria-hidden="true" />
-                    {cat.name}
-                  </TabsTrigger>
-                ))}
-              </TabsList>
-            </Tabs>
+            <div className="w-full overflow-x-auto scrollbar-hide scroll-smooth">
+              <Tabs value={selectedCategory} onValueChange={setSelectedCategory} className="w-max min-w-full">
+                <TabsList className="flex flex-nowrap gap-2 justify-center glassmorphism p-2 min-w-max">
+                  {categories.map((cat) => (
+                    <TabsTrigger
+                      key={cat.id}
+                      value={cat.id}
+                      className="flex items-center gap-2 px-5 py-2 rounded-lg font-medium text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-white/10 focus-ring min-w-[120px] justify-center text-center whitespace-nowrap"
+                    >
+                      <cat.icon className="h-4 w-4" aria-hidden="true" />
+                      {cat.name}
+                    </TabsTrigger>
+                  ))}
+                </TabsList>
+              </Tabs>
+            </div>
             <Input
               type="text"
               placeholder="Search resources..."
