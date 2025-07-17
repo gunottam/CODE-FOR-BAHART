@@ -83,7 +83,7 @@ const getUserId = () => {
   return null;
 };
 
-const BACKEND_URL = "http://localhost:5000";
+const BACKEND_URL = "http://localhost:2001";
 
 export default function JournalPage() {
   const { theme, resolvedTheme } = useTheme()

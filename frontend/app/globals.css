@@ -296,19 +296,39 @@
 
 /* Scrollbar styling */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 10px;
+  height: 10px;
+  background: transparent;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-800;
+  background: rgba(180, 180, 200, 0.10);
+  border-radius: 8px;
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
+  background: linear-gradient(135deg, #e0e7ff 40%, #c7d2fe 100%);
+  border-radius: 8px;
+  min-height: 24px;
+  transition: background 0.2s;
+  border: 2px solid rgba(255,255,255,0.3);
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400 dark:bg-gray-500;
+  background: linear-gradient(135deg, #a5b4fc 40%, #818cf8 100%);
+}
+
+.dark ::-webkit-scrollbar-track {
+  background: rgba(30, 41, 59, 0.4);
+}
+
+.dark ::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, #312e81 40%, #6366f1 100%);
+  border: 2px solid rgba(30,41,59,0.5);
+}
+
+.dark ::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, #6366f1 40%, #818cf8 100%);
 }
 
 /* Selection styling */

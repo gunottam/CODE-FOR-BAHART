@@ -2,6 +2,9 @@ from flask import Flask, request, jsonify, session
 import os
 from groq import Groq
 from flask_cors import CORS
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
 CORS(app)
@@ -37,9 +40,9 @@ def chat():
     user_message = data.get('message', '').strip()
     if not user_message:
         return jsonify({"error": "No message provided."}), 400
-    api_key = os.getenv("GROQ_API_KEY")
+    api_key = os.getenv("GROK_KEY")
     if not api_key:
-        return jsonify({"error": "GROQ_API_KEY environment variable not set."}), 500
+        return jsonify({"error": "GROK_KEY environment variable not set. Please add it to your .env file."}), 500
     client = Groq(api_key=api_key)
     # Load or initialize chat history from session
     chat_history = session.get('chat_history', [])
